@@ -1,0 +1,151 @@
+.property-container{
+    margin-top: 3%;
+    width: 70%;
+    border-radius: 5px;
+}
+.create-listing{
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+.listing-profile{
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.listing__user-profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: 800;
+    margin-right: 5px;
+    width: 40px;
+    height: 40px;
+    background: #475569;
+    border-radius: 50%;
+}
+.listing__profile-text{
+    color: #333;
+}
+.split{
+    margin: 0 auto;
+    width: 90%;
+    background: #475569;
+    padding: 1px;
+    outline: none;
+    border: none;
+}
+.listing-cta{
+    margin-top: 10px;
+    padding: 0 6%;
+    display: flex;
+    justify-content: end;
+}
+.listing-button{
+    padding: 5px 30px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    background: #008080;
+    color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.listing-button:hover{
+    background: #014040;
+}
+
+/* Property.jsx */
+.property-listing{
+    margin: 3% 0;
+}
+.property-list{
+    width: 100%;
+}
+.property{
+    margin: 20px 0;
+    border-radius: 8px;
+    padding: 2%;
+    width: 100%;
+    background: #fff;
+}
+.property-image{
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: center;
+}
+.property-profile-image{
+    width: 100%;
+    aspect-ratio: 4/3;
+    height: 350px;
+    object-fit: cover;
+}
+.property-description{
+    margin-top: 15px;
+}
+.title-price{
+    padding-right: 2%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.property-title{
+    width: 80%;
+    color: #1e293b;
+    font-size: 1.3em;
+}
+.property-price{
+    display: flex;
+    justify-content: end;
+    width: 20%;
+    color: #d54938;
+    font-weight: 800;
+    font-size: 1.3em;
+}
+.room-specs{
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    gap: 0 4em;
+    color: #393939;
+}
+.location-desc{
+    margin-top: 10px;
+    color: #393939;
+}
+.more-desc-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    margin: 10px 0;
+    padding: 3px 0;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #2563eb;
+}
+.call-owner-btn{
+    margin: 15px 0;
+    outline: none;
+    border: none;
+    font-size: 1.1em;
+    background: #008080;
+    color: #fff;
+    padding: 5px 60px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.call-owner-btn:hover{
+    background: #054e4e;
+}
