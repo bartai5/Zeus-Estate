@@ -4,6 +4,7 @@
     border-radius: 5px;
 }
 .create-listing{
+    margin: 0 0 20px;
     background: #fff;
     border-radius: 5px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
@@ -45,6 +46,7 @@
     justify-content: end;
 }
 .listing-button{
+    text-decoration: none;
     padding: 5px 30px;
     border: none;
     outline: none;
@@ -59,14 +61,11 @@
 }
 
 /* Property.jsx */
-.property-listing{
-    margin: 3% 0;
-}
 .property-list{
     width: 100%;
 }
 .property{
-    margin: 20px 0;
+    margin-bottom: 20px;
     border-radius: 8px;
     padding: 2%;
     width: 100%;

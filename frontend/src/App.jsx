@@ -5,6 +5,7 @@ import Home from './pages/home/Home'
 import Login from './pages/authentication/Login'
 import Register from './pages/authentication/Register'
 import PropertyDescription from './pages/property-description/PropertyDescription'
+import AccountMgmt from './pages/account-mgmt/AccountManagement'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/property' element={<PropertyDescription />} />
+        <Route path='/manage-account' element={<AccountMgmt />} />
       </Routes>
     </>
   )

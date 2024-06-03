@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom';
 const CreateListing = () => {
   return (
     <div className="create-listing">
@@ -9,7 +10,7 @@ const CreateListing = () => {
       </div>
       <hr className="split" />
       <div className="listing-cta">
-        <button className="listing-button">Create Listing</button>
+        <Link to='/create-listing' className="listing-button">Create Listing</Link>
       </div>
     </div>
   );

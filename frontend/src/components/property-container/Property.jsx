@@ -37,7 +37,7 @@ const Property = () => {
               </Link>
             </div>
             <div className="property-btns call-owner">
-              <button className="call-owner-btn">Get The House</button>
+              <button className="call-owner-btn">Get Property</button>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@ const Property = () => {
               </Link>
             </div>
             <div className="property-btns call-owner">
-              <button className="call-owner-btn">Get The House</button>
+              <button className="call-owner-btn">Get Property</button>
             </div>
           </div>
         </div>
