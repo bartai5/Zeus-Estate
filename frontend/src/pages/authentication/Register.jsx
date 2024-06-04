@@ -1,9 +1,12 @@
 import { useState, useRef } from "react";
 import TextInput from "../../components/form/TextInput";
 import ButtonInput from "../../components/form/ButtonInput";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "./Auth.css";
+import AxiosInstance from "../../utils/AxiosInstance";
 const Register = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const form = useRef();
   const [formData, setFormData] = useState({
     first_name: "",
@@ -13,15 +16,45 @@ const Register = () => {
     password: "",
   });
 
+  const clearForm = () => {
+    setFormData({
+      ...formData,
+      first_name: '',
+      last_name: '',
+      email: '',
+      username: '',
+      password: ''
+    })
+  }
+
   const handleFormChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name] : e.target.value
     })
   }
+
+  const handleRegister = async (e)=>{
+    setLoading(!loading);
+    e.preventDefault();
+    try{
+      const response = await AxiosInstance.post('api/user/register', formData);
+      if (response.status === 201){
+        alert("Registration successful. Please login to continue");
+        clearForm();
+        navigate('/login');
+      }
+    }
+    catch(error){
+      console.log('====================================');
+      console.log(error);
+      console.log('====================================');
+    }
+  }
+
   return (
     <div className="auth">
-    <form className="auth__form" ref={form}>
+    <form method="POST" className="auth__form" ref={form} onSubmit={handleRegister}>
       <h2 className="form--title">Create An Account</h2>
       <TextInput
         labelName={"First Name"}
@@ -68,7 +101,7 @@ const Register = () => {
         value={formData.password}
         cName={"input--text"}
       />
-      <ButtonInput buttonText={"Register"} buttonType={"submit"}  cName={'submit-btn'}/>
+      <ButtonInput buttonText={loading ? "Creating Account..." : "Register"} buttonType={"submit"}  cName={'submit-btn'}/>
       <p className="auth__form--text">
         Already have an account? <Link to='/login'>Login</Link>
       </p>

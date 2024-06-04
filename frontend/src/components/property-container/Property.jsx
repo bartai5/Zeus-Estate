@@ -1,13 +1,24 @@
 import { Link } from "react-router-dom";
 import PropertyProfile from "../../assets/imgs/room/profile.jpg";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-
+import { CiMenuKebab } from "react-icons/ci";
 
 const Property = () => {
-
   return (
     <div className="property-list">
       <div className="property">
+        <div className="property-host">
+          <div className="host-info">
+            <div className="host-image">JK</div>
+            <div className="host-credentials">
+              <h3 className="host-name">John Kariuki</h3>
+              <p className="host-date">Mar 12, 2024</p>
+            </div>
+          </div>
+          <div className="property-cta">
+            <CiMenuKebab className='property-cta-btn'/>
+          </div>
+        </div>
         <div className="property-image">
           <img
             src={PropertyProfile}
@@ -32,7 +43,7 @@ const Property = () => {
           </div>
           <div className="action-btns">
             <div className="property-btns more-desc">
-              <Link to={'/property'} className="more-desc-btn">
+              <Link to={"/property"} className="more-desc-btn">
                 More Description <FaArrowUpRightFromSquare />
               </Link>
             </div>
@@ -68,7 +79,7 @@ const Property = () => {
           </div>
           <div className="action-btns">
             <div className="property-btns more-desc">
-            <Link to={'/property'} className="more-desc-btn">
+              <Link to={"/property"} className="more-desc-btn">
                 More Description <FaArrowUpRightFromSquare />
               </Link>
             </div>

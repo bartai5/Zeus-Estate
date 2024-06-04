@@ -9,11 +9,16 @@ import { LuLogOut } from "react-icons/lu";
 import { RiListIndefinite } from "react-icons/ri";
 
 const NavBar = () => {
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [toggleAccount, setToggleAccount] = useState(false);
+
+  const userInitials =
+    userDetails.first_name.charAt(0) + userDetails.last_name.charAt(0);
 
   const handleAccountMgmt = () => {
     setToggleAccount(!toggleAccount);
   };
+
   return (
     <section className="navigation">
       <div className="estate-logo">
@@ -32,16 +37,19 @@ const NavBar = () => {
         <button className="search-btn">Search</button>
       </div>
       <div className="user-profile" onClick={handleAccountMgmt}>
-        <div className="profile-pic">KJ</div>
-        <span className="user-name">Kipkurui</span>
+        <div className="profile-pic">{userInitials}</div>
+        <span className="user-name">{userDetails.username}</span>
       </div>
 
       {toggleAccount ? (
         <div className="account-mgmt">
-          <Link to='/my-listings' className="acc-mgmt-links my-listings">
-          <RiListIndefinite /> My Listings
+          <Link to="/my-listings" className="acc-mgmt-links my-listings">
+            <RiListIndefinite /> My Listings
           </Link>
-          <Link to="/manage-account" className="acc-mgmt-links manage-account">
+          <Link
+            to={`/user/${userDetails.id}`}
+            className="acc-mgmt-links manage-account"
+          >
             <LiaToolsSolid /> My Account
           </Link>
           <Link to="/logout" className="acc-mgmt-links logout">

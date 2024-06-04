@@ -1,5 +1,6 @@
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import generics, status
 from .serializers import *
@@ -16,6 +17,11 @@ class UserHomeView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
+class userDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= User.objects.all()
+    persmission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+    
 # View that handles user registeration
 class ListCreateUserView(generics.ListCreateAPIView):
     queryset = User.objects.all()
