@@ -25,8 +25,8 @@ REST_FRAMEWORK = {
     ],
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFESPAN': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFESPAN': timedelta(days=1),
+    'ACCESS_TOKEN_LIFESPAN': timedelta(days=1),
+    'REFRESH_TOKEN_LIFESPAN': timedelta(days=7),
 }
 
 # Application definition

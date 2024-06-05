@@ -8,6 +8,7 @@ import Register from "./pages/authentication/Register";
 import PropertyDescription from "./pages/property-description/PropertyDescription";
 import AccountMgmt from "./pages/account-mgmt/AccountManagement";
 import Dashboard from "./pages/dashboard/Dashboard";
+import UserListingCreate from "./pages/user listing/UserListingCreate";
 
 function App() {
   const Logout = () => {
@@ -43,6 +44,7 @@ function App() {
         <Route path="/register" element={<RegisterAndLogout />} />
         <Route path="/property" element={<PropertyDescription />} />
         <Route path="/user/:id/" element={<AccountMgmt />} />
+        <Route path="/create-listing" element={<UserListingCreate />} />
 
         <Route path="/logout" element={<Logout />} />
       </Routes>

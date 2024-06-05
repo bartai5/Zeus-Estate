@@ -1,10 +1,8 @@
-import React from 'react'
-
-const InputField = ({labelName, placeholder, inputName, onChange, value}) => {
+const InputField = ({inputType,labelName, placeholder, inputName, onChange, value, inputId}) => {
   return (
-    <div className="filter-control">
+    <div className="filter-control" id={inputId}>
         <label>{labelName}</label>
-        <input type="number" placeholder={placeholder} name={inputName} value={value} onChange={onChange}/>
+        <input type={inputType} placeholder={placeholder} name={inputName} value={value} onChange={onChange} required/>
     </div>
   )
 }
