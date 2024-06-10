@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+db_list = [MultiImagePost]
+
+admin.site.register(db_list)

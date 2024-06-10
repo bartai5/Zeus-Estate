@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import *
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,3 +13,8 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+    
+class MultiImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MultiImagePost
+        fields = ('id', 'title', 'description', 'image', 'slug', 'created_at')
