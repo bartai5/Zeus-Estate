@@ -53,4 +53,3 @@ class RetrieveDestroyPostView(generics.RetrieveDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RetrievePostSerializer
     queryset = Post.objects.all()
-    

@@ -40,12 +40,33 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/property/:slug"
+          element={
+            <ProtectedRoute>
+              <PropertyDescription />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/:id/"
+          element={
+            <ProtectedRoute>
+              <AccountMgmt />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-listing"
+          element={
+            <ProtectedRoute>
+              <UserListingCreate />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterAndLogout />} />
-        <Route path="/property/:slug" element={<PropertyDescription />} />
-        <Route path="/user/:id/" element={<AccountMgmt />} />
-        <Route path="/create-listing" element={<UserListingCreate />} />
-
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </>

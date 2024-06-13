@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AxiosInstance from "../../utils/AxiosInstance";
 import "./PropertyDescription.css";
+
 import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
