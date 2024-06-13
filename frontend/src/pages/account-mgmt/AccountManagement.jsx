@@ -15,17 +15,18 @@ const AccountManagement = () => {
     username: "",
   });
 
-  const getUserDetails = async () => {
-    try {
-      const response = await AxiosInstance.get(`/api/user/${id}`);
-      setUserDetails(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
 
   useEffect(() => {
-    getUserDetails();
+    const getUserDetails = async () => {
+      try {
+        const response = await AxiosInstance.get(`/api/user/${id}`);
+        setUserDetails(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getUserDetails()
   }, [id]);
 
   const handleChange = (e) => {

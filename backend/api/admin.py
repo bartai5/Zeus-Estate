@@ -1,6 +1,4 @@
 from django.contrib import admin
-from .models import *
+from .models import Post, PostImages
 
-db_list = [MultiImagePost]
-
-admin.site.register(db_list)
+admin.site.register([Post, PostImages])

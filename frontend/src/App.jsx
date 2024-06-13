@@ -10,10 +10,6 @@ import AccountMgmt from "./pages/account-mgmt/AccountManagement";
 import Dashboard from "./pages/dashboard/Dashboard";
 import UserListingCreate from "./pages/user listing/UserListingCreate";
 
-// This is trials
-import CreatePost from "./pages/user listing/CreatePost";
-import RetrievePost from "./pages/user listing/RetrievePost";
-
 function App() {
   const Logout = () => {
     localStorage.clear();
@@ -46,27 +42,9 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterAndLogout />} />
-        <Route path="/property" element={<PropertyDescription />} />
+        <Route path="/property/:slug" element={<PropertyDescription />} />
         <Route path="/user/:id/" element={<AccountMgmt />} />
         <Route path="/create-listing" element={<UserListingCreate />} />
-
-        {/* This is trials */}
-        <Route
-          path="/create"
-          element={
-            <ProtectedRoute>
-              <CreatePost />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/posts"
-          element={
-            <ProtectedRoute>
-              <RetrievePost />
-            </ProtectedRoute>
-          }
-        />
 
         <Route path="/logout" element={<Logout />} />
       </Routes>

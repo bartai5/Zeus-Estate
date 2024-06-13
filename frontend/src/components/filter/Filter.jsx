@@ -1,6 +1,7 @@
 import DropDown from "../form/DropDown";
 import InputField from "../form/InputField";
 import InputRange from "../form/InputRange";
+// import AxiosInstance from '../../utils/AxiosInstance';
 import "./Filter.css";
 const Filter = () => {
   return (

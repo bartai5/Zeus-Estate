@@ -17,7 +17,7 @@ class UserHomeView(APIView):
         data['is_staff'] = user.is_staff
         return Response(data, status=status.HTTP_200_OK)
 
-
+# View to handle user details
 class userDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset= User.objects.all()
     persmission_classes = [IsAuthenticated]
@@ -29,32 +29,28 @@ class ListCreateUserView(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-class MultiImageView(APIView):
+# View that handles post creation
+class CreatePostView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
     
     def post(self, request, format=None):
-        data = request.data.copy() # Create a mutable copy of request data
-        data['user_post'] = request.user.id  # Set user_post to the current user's ID
-        print(request.data)
-        serializer = MultiImageSerializer(data=data)
+        data = request.data.copy()
+        data['host'] = request.user.id
+        serializer = PostSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(user_post=request.user)
+            serializer.save(host=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ListPostView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = MultiImageSerializer
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
-    def get_queryset(self):
-        return MultiImagePost.objects.filter(user_post=self.request.user)
-
-class RetrieveUpdateDestroyPostView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = MultiImagePost.objects.all()
-    serializer_class = MultiImageSerializer
+class ListAllPosts(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]  # Add parsers for handling multipart data
+    serializer_class = RetrievePostSerializer
+    queryset = Post.objects.all().order_by('-created_at')
     
-    def get_queryset(self):
-        return self.queryset.filter(user_post=self.request.user)
+# View that handles post retrieval, update and deletion
+class RetrieveDestroyPostView(generics.RetrieveDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RetrievePostSerializer
+    queryset = Post.objects.all()
+    

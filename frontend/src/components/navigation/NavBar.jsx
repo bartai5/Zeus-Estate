@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./NavBar.css";
 import { Link } from "react-router-dom";
-import EstateLogo from "../../assets/imgs/estate-logo.svg";
+import EstateLogo from '../../assets/logo/estate-logo.svg';
 import SearchInput from "../form/SearchInput";
 import { FaSearch } from "react-icons/fa";
 import { LiaToolsSolid } from "react-icons/lia";

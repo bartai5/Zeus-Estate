@@ -1,3 +1,4 @@
+import AxiosInstance from "../../utils/AxiosInstance";
 import DropDown from "../../components/form/DropDown";
 import InputField from "../../components/form/InputField";
 import InputTextarea from "../../components/form/InputTextarea";
@@ -5,13 +6,48 @@ import ButtonInput from "../../components/form/ButtonInput";
 import NavBar from "../../components/navigation/NavBar";
 import "./UserListingCreate.css";
 import { FaCloudUploadAlt } from "react-icons/fa";
-// import { IoClose } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserListingCreate = () => {
+  const navigate = useNavigate()
+  const userInfo = JSON.parse(localStorage.getItem("userDetails"));
+
+  const host_name = userInfo.first_name + " " + userInfo.last_name;
+  const host_initials = host_name.charAt(0).toUpperCase() + host_name.charAt(1).toUpperCase();
+
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([])
   const inputRef = useRef();
+
+  const slugify = (text) => {
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w-]+/g, "") // Remove all non-word chars
+      .replace(/--+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, ""); // Trim - from end of text
+  };
+
+  const initialFormData = {
+    host_initials: host_initials,
+    host_name: host_name,
+    property_title: "",
+    slug: "",
+    property_type: "",
+    property_price: "",
+    bedroom_no: "",
+    bathroom_no: "",
+    property_location: "",
+    contact_info: "",
+    property_description: "",
+    images: [],
+  };
+
+  const [postData, setPostData] = useState(initialFormData);
+  const [postImages, setPostImages] = useState([]);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -23,36 +59,78 @@ const UserListingCreate = () => {
     setIsDragging(false);
   };
 
-  const handleOnDrop = async (e)=>{
-    e.preventDefault()
-    setIsDragging(false)
+  const handleOnDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    setPostImages((prevImages) => [...prevImages, ...files]);
+  };
 
-    const files = e.dataTransfer.files;
-
-    console.log('====================================');
-    console.log(files);
-    console.log('====================================');
-  }
-  
-  const handleFileUpload = async (e)=>{
-    setSelectedFiles(e.target.files)
-    const formData = new FormData();
-    for (let i = 0; i < selectedFiles.length; i++){
-      formData.append('images', selectedFiles[i])
+  const handleChange = (e) => {
+    if (e.target.name === "images") {
+      setPostImages((prevImages) => [
+        ...prevImages,
+        ...Array.from(e.target.files),
+      ]);
+    } else if (e.target.name === "property_title") {
+      setPostData({
+        ...postData,
+        [e.target.name]: e.target.value,
+        slug: slugify(e.target.value.trim()),
+      });
+    } else {
+      setPostData({
+        ...postData,
+        [e.target.name]: e.target.value,
+      });
     }
+  };
 
-    console.log('====================================');
-    console.log(formData);
-    console.log('====================================');
-    console.log('====================================');
-    console.log(selectedFiles);
-    console.log('====================================');
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      postImages.forEach((image) => {
+        formData.append("images", image);
+      });
+
+      formData.append("host_initials", postData.host_initials);
+      formData.append("host_name", postData.host_name);
+      formData.append("property_title", postData.property_title);
+      formData.append("slug", postData.slug);
+      formData.append("property_type", postData.property_type);
+      formData.append("property_price", postData.property_price);
+      formData.append("bedroom_no", postData.bedroom_no);
+      formData.append("bathroom_no", postData.bathroom_no);
+      formData.append("property_location", postData.property_location);
+      formData.append("contact_info", postData.contact_info);
+      formData.append("property_description", postData.property_description);
+
+      const response = await AxiosInstance.post(
+        "/api/user/create-post/",
+        formData
+      );
+      console.log(response.data);
+      alert("Listing Created Successfully");
+      setPostData(initialFormData);
+      setPostImages([]);
+      navigate('/')
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred while creating the listing");
+    }
+  };
+
+  const removeImage = (index) => {
+    const newImages = [...postImages];
+    newImages.splice(index, 1);
+    setPostImages(newImages);
+  };
 
   return (
     <section className="user-listing-create">
       <NavBar />
-      <div className="listing-container">
+      <form className="listing-container" method="POST" onSubmit={handleSubmit}>
         <div className="list-container image-upload">
           <div className="image-upload-title">
             <h2 className="i-title">Upload Property Images</h2>
@@ -77,7 +155,7 @@ const UserListingCreate = () => {
                 <p className="p-tag">OR</p>
                 <button
                   className="btn-primary browse-files"
-                  onClick={(e)=>{
+                  onClick={(e) => {
                     e.preventDefault;
                     inputRef.current.click();
                   }}
@@ -86,52 +164,96 @@ const UserListingCreate = () => {
                 </button>
                 <input
                   type="file"
-                  name="images-input"
+                  name="images"
                   multiple
                   ref={inputRef}
                   className="file-browser"
-                  onChange={handleFileUpload}
+                  onChange={handleChange}
                   accept="images/*"
                 />
               </div>
             )}
           </div>
-          <div className="uploaded-files"></div>
+          <div className="uploaded-files">
+            {postImages.map((image, index) => (
+              <div key={index} className="file-preview">
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="Preview"
+                  className="preview-image"
+                />
+                <div className="file-info">
+                  <p className="file-name">{image.name}</p>
+                  <p className="file-size">
+                    {(image.size / (1024 * 1024)).toFixed(2)} MB
+                  </p>
+                </div>
+                <IoClose
+                  className="close-icon"
+                  onClick={() => removeImage(index)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         <div className="list-container listing-section">
-          <form className="my-form" method="POST">
+          <div className="my-form">
             <InputField
               inputName={"host_initials"}
               inputType={"text"}
               labelName={"Host Initials"}
               placeholder={"Enter Host Initials"}
               inputId="user_initials"
+              value={postData.host_initials}
+              onChange={handleChange}
             />
             <InputField
               labelName={"Property Title"}
               placeholder={"Enter Property Title"}
               inputName={"property_title"}
               inputType={"text"}
+              value={postData.property_title}
+              onChange={handleChange}
             />
-            <DropDown labelName={"Property Type"} inputName={"property_type"} />
+            <InputField
+              labelName={"Property Slug"}
+              placeholder={"Enter Property Slug"}
+              inputName={"slug"}
+              inputType={"text"}
+              value={postData.slug}
+              onChange={handleChange}
+              // inputId="user_initials"
+            />
+            <DropDown
+              labelName={"Property Type"}
+              inputName={"property_type"}
+              onChange={handleChange}
+              value={postData.property_type}
+            />
             <InputField
               labelName={"Price"}
               placeholder={"Enter Price"}
               inputName={"property_price"}
               inputType={"number"}
+              value={postData.property_price}
+              onChange={handleChange}
             />
             <div className="bath-bed-container">
               <InputField
                 labelName={"Bedrooms"}
                 placeholder={"Enter Number of Bedrooms"}
-                inputName={"bedrooms_no"}
+                inputName={"bedroom_no"}
                 inputType={"number"}
+                value={postData.bedroom_no}
+                onChange={handleChange}
               />
               <InputField
                 labelName={"Bathrooms"}
                 placeholder={"Enter Number of Bathrooms"}
                 inputName={"bathroom_no"}
                 inputType={"number"}
+                value={postData.bathroom_no}
+                onChange={handleChange}
               />
             </div>
             <InputField
@@ -139,159 +261,34 @@ const UserListingCreate = () => {
               placeholder={"Enter Location of the Property"}
               inputName={"property_location"}
               inputType={"text"}
+              value={postData.property_location}
+              onChange={handleChange}
             />
             <InputField
               labelName={"Contact Info"}
               placeholder={"Enter Contact Information"}
               inputName={"contact_info"}
               inputType={"text"}
+              value={postData.contact_info}
+              onChange={handleChange}
             />
             <InputTextarea
               labelName={"Description"}
               placeholder={"Provide a brief description of the property"}
               inputName={"property_description"}
+              value={postData.property_description}
+              onChange={handleChange}
             />
             <ButtonInput
               buttonType={"submit"}
               buttonText={"Create Listing"}
               cName={"btn-primary"}
             />
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
     </section>
   );
 };
 
 export default UserListingCreate;
-
-// const getUserData = JSON.parse(localStorage.getItem("userDetails"));
-// const userInitials =
-//   getUserData.first_name.charAt(0).toUpperCase() +
-//   getUserData.last_name.charAt(0).toUpperCase();
-// const inputRef = useRef();
-// const form = useRef();
-// const [isDragging, setIsDragging] = useState(false);
-// const [uploadedFiles, setUploadedFiles] = useState([]);
-// const [listingData, setListingData] = useState({
-//   host_initials: userInitials,
-//   property_title: "",
-//   property_type: "",
-//   property_price: "",
-//   bedrooms_no: "",
-//   bathroom_no: "",
-//   property_location: "",
-//   contact_info: "",
-//   property_description: "",
-// });
-
-// const handleFormChange = (e) => {
-//   e.preventDefault();
-//   setListingData({
-//     ...listingData,
-//     [e.target.name]: e.target.value,
-//   });
-// };
-
-// const handleDragOver = (e) => {
-//   e.preventDefault();
-//   e.dataTransfer.dropEffect = "copy";
-//   setIsDragging(true);
-// };
-// const handleDragLeave = (e) => {
-//   e.preventDefault();
-//   setIsDragging(false);
-// };
-
-// const handleOnDrop = (e) => {
-//   e.preventDefault();
-//   setIsDragging(false);
-
-//   const files = e.dataTransfer.files;
-//   const acceptedFiles = Array.from(files).filter((file) =>
-//     file.type.startsWith("image/")
-//   );
-//   const fileData = acceptedFiles.map((file) => ({
-//     name: file.name,
-//     size: (file.size / (1024 * 1024)).toFixed(2),
-//     url: URL.createObjectURL(file),
-//     originalFile: file,
-//   }));
-//   setUploadedFiles((prevFiles) => [...prevFiles, ...fileData]);
-// };
-
-// const handleSubmitFiles = () => {
-//   const files = inputRef.current.files;
-//   const acceptedFiles = Array.from(files).filter((file) =>
-//     file.type.startsWith("image/")
-//   );
-//   const fileData = acceptedFiles.map((file) => ({
-//     name: file.name,
-//     size: (file.size / (1024 * 1024)).toFixed(2),
-//     url: URL.createObjectURL(file),
-//     originalFile: file,
-//   }));
-//   setUploadedFiles((prevFiles) => [...prevFiles, ...fileData]);
-// };
-
-// useEffect(() => {
-//   return () => {
-//     uploadedFiles.forEach((file) => URL.revokeObjectURL(file.url));
-//   };
-// }, [uploadedFiles]);
-
-// const removeFile = (index) => {
-//   const newFiles = uploadedFiles.filter((file, i) => i !== index);
-//   setUploadedFiles(newFiles);
-// };
-
-// const handleCreateListing = async (e) =>{
-//   e.preventDefault();
-
-//   const formData = new FormData();
-//   formData.append('host_initials', listingData.host_initials);
-//   formData.append('property_title', listingData.property_title);
-//   formData.append('property_type', listingData.property_type);
-//   formData.append('property_price', listingData.property_price);
-//   formData.append('bedrooms_no', listingData.bedrooms_no);
-//   formData.append('bathroom_no', listingData.bathroom_no);
-//   formData.append('property_location', listingData.property_location);
-//   formData.append('contact_info', listingData.contact_info);
-//   formData.append('property_description', listingData.property_description);
-
-//   uploadedFiles.forEach((file, index)=>{
-//     formData.append('images', file.originalFile);
-//   })
-
-//   try{
-//     const response = await AxiosInstance.post('api/user/listing/', formData);
-//     if (response.status === 201){
-//       alert('Listing created successfully');
-//       form.current.reset();
-//       setUploadedFiles([]);
-//     }
-//   }
-//   catch(error){
-//     console.log('====================================');
-//     console.log(error);
-//     console.log('====================================');
-//   }
-// }
-
-// {uploadedFiles.map((file, index) => (
-//   <div key={index} className="file-details">
-//     <img src={file.url} alt={file.name} className="my-img" />
-//     <div className="file-desc">
-//       <p className="u-file-name">{file.name}</p>
-//       <p className="u-file-size">{file.size} MB</p>
-//     </div>
-//     <div
-//       className="file-action"
-//       onClick={removeFile.bind(null, index)}
-//     >
-//       <IoClose className="remove-file-btn" />
-//     </div>
-//   </div>
-// ))}
-
-

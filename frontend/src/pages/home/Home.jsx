@@ -1,4 +1,4 @@
-import Filter from "../../components/filter/Filter"
+// import Filter from "../../components/filter/Filter"
 import NavBar from "../../components/navigation/NavBar"
 import './Home.css'
 import PropertyContainer from "../../components/property-container/PropertyContainer"
@@ -7,7 +7,7 @@ const Home = () => {
     <section className="home-section">
       <NavBar />
       <section className="home-container">
-      <Filter />
+      {/* <Filter /> */}
       <PropertyContainer/>
       </section>
     </section>
